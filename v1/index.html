@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#d9efff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>QUANTUM TYCOON</title>
+<script>window.QT_STATIC = true; window.QT_ISSUES = "https://github.com/minatoyuichiro/quantum-tycoon/issues/new"; window.QT_SHARE_URL = "https://tycoon.blueqat.app/v1/";</script>
+<meta name="description" content="バイトから会社を立ち上げ、量子コンピュータをつくって、東証グロース市場に上場する経営ゲーム。スマホで1時間くらいで遊べます。">
+<link rel="canonical" href="https://tycoon.blueqat.app/v1/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="QUANTUM TYCOON">
+<meta property="og:title" content="QUANTUM TYCOON — 量子コンピュータの会社をつくって上場へ">
+<meta property="og:description" content="バイトから会社を立ち上げ、量子コンピュータをつくって上場をめざす経営ゲーム。">
+<meta property="og:url" content="https://tycoon.blueqat.app/v1/">
+<meta property="og:image" content="https://tycoon.blueqat.app/v1/assets/cover_wide.png?v=139b4b48f8">
+<meta property="og:image:width" content="2400">
+<meta property="og:image:height" content="1350">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:alt" content="QUANTUM TYCOON">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="QUANTUM TYCOON — 量子コンピュータの会社をつくって上場へ">
+<meta name="twitter:description" content="バイトから会社を立ち上げ、量子コンピュータをつくって上場をめざす経営ゲーム。">
+<meta name="twitter:image" content="https://tycoon.blueqat.app/v1/assets/cover_wide.png?v=139b4b48f8">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html, body {
+    width:100%; height:100%; overflow:hidden; background:#eaf4ff;
+    font-family:"Hiragino Maru Gothic ProN","Hiragino Sans","Yu Gothic UI",system-ui,sans-serif;
+    -webkit-user-select:none; user-select:none; touch-action:none; overscroll-behavior:none;
+    color:#33304a;
+  }
+  #c { display:block; width:100%; height:100%; touch-action:none; }
+  #start {
+    position:fixed; inset:0; z-index:10; cursor:pointer;
+    background:linear-gradient(#8bbbe9 0%,#c2d1de 25%,#e1dad0 40%,#f6e0c6 50%,#ffe2c1 62%,#f2cea5 90%,#ecc69f 100%);
+  }
+  #start.hide { display:none; }
+  #cover { width:100%; height:100%; object-fit:cover; display:block; }
+  #start.loading::after {
+    content:""; position:absolute; left:50%; bottom:38px; width:34px; height:34px;
+    margin-left:-17px; border-radius:50%;
+    border:3px solid rgba(255,255,255,.45); border-top-color:#fff;
+    filter:drop-shadow(0 1px 2px rgba(40,30,90,.45));
+    animation:spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  #start picture { display:block; width:100%; height:100%; }
+  #titleInfo { position:absolute; left:50%; bottom:calc(5% + 64px); transform:translateX(-50%);
+    display:flex; flex-direction:column; align-items:center; gap:8px; width:max-content; max-width:92%; }
+  #titleInfo:empty, #start.loading #titleInfo { display:none; }
+  #titleInfo .save { padding:8px 16px; border-radius:14px; background:rgba(255,255,255,.93);
+    color:#33304a; font-weight:800; font-size:13px; line-height:1.5; text-align:center;
+    box-shadow:0 4px 12px rgba(40,40,90,.16); }
+  #titleInfo .save b { color:#c98f0f; }
+  #titleInfo .new { padding:7px 14px; border-radius:999px; border:none; background:rgba(255,255,255,.75);
+    color:#7a7590; font-family:inherit; font-weight:800; font-size:12px; cursor:pointer; }
+  #titleInfo .sup { padding:6px 14px; border-radius:999px; background:rgba(255,255,255,.85); color:#a86f00;
+    font-weight:900; font-size:12px; line-height:1.4; text-decoration:none; box-shadow:0 3px 8px rgba(40,40,90,.14); }
+  #titleInfo .sup.on { background:linear-gradient(135deg,#fff3b0,#ffd54a 55%,#f5b21c); color:#5a3a00;
+    box-shadow:0 3px 0 #c98f0f,0 6px 14px rgba(120,80,0,.25); }
+  #titleAcc { position:absolute; left:12px; top:calc(14px + env(safe-area-inset-top)); z-index:31;
+    display:flex; align-items:center; gap:6px; max-width:55%; }
+  #titleAcc:empty, #start.loading #titleAcc { display:none; }
+  #titleVers { position:absolute; right:8px; bottom:calc(6px + env(safe-area-inset-bottom)); z-index:31; display:flex; gap:6px; }
+  #titleVers:empty, #start.loading #titleVers { display:none; }
+  #titleVers a { padding:3px 8px; border-radius:9px; background:rgba(255,255,255,.55); color:#4a4560;
+    font:700 10.5px/1.4 system-ui,sans-serif; text-decoration:none; }
+  #titleVers a.cur { background:rgba(255,255,255,.9); color:#6f57e0; }
+  #titleAcc span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:11px; font-weight:700;
+    color:#33304a; background:rgba(255,255,255,.85); padding:6px 10px; border-radius:999px; }
+  #titleAcc button { flex:none; padding:7px 12px; border:none; border-radius:999px; background:#fff;
+    color:#e2504a; font-family:inherit; font-weight:800; font-size:12px; cursor:pointer;
+    box-shadow:0 3px 8px rgba(40,40,90,.15); }
+  #tapStart { display:none; position:absolute; left:50%; bottom:calc(5% + env(safe-area-inset-bottom));
+    transform:translateX(-50%); max-width:92%; padding:.72em 1.55em; border-radius:999px;
+    background:#6f57e0; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    font-weight:900; font-size:clamp(13px, 3.8vmin, 20px); line-height:1; letter-spacing:.06em;
+    box-shadow:0 5px 0 #4a36a8, 0 10px 22px rgba(40,30,90,.3); pointer-events:none; }
+  #start.loading #tapStart { display:none; }
+  @media (min-aspect-ratio: 1152/2064) {
+    #start { background:linear-gradient(#8bbbe9 12%,#e1dad0 40%,#ffe2c1 62%,#ecc69f 100%); }
+    #cover { object-position:50% 0; object-position:50% max(0px, calc(100vh - 164.07vw + 4px));
+      object-position:50% max(0px, calc(100dvh - 164.07vw + 4px)); }
+    #tapStart { display:block; }
+    #titleInfo { bottom:calc(5% + 64px + env(safe-area-inset-bottom)); }
+  }
+  @media (min-aspect-ratio: 1/1) {
+    #start { background:linear-gradient(#81aad4 0%,#abb6c6 25%,#c3c0bf 40%,#d7c1b0 50%,#dec2a9 60%,#dfbfa4 75%,#deba99 100%); }
+    #cover { object-position:19% 50%; object-position:max(50%, -15.1vh) 50%; object-position:max(50%, -15.1dvh) 50%; }
+    #tapStart { display:none; }
+    #titleInfo { bottom:calc(6% + 70px); left:max(50%, 73.8vh); left:max(50%, 73.8dvh); }
+    #titleAcc { left:auto; right:124px; max-width:calc(55% - 124px); }
+  }
+  @media (min-aspect-ratio: 1/1) and (min-width: 900px) {
+    #titleAcc { right:164px; max-width:calc(55% - 164px); }
+  }
+  @media (min-aspect-ratio: 201/100) {
+    #cover { object-position:50% 0; }
+    #tapStart { display:block; }
+  }
+  @media (min-aspect-ratio: 1/1) and (max-height: 520px) {
+    #titleInfo { left:auto; right:calc(14px + env(safe-area-inset-right)); top:50%; bottom:auto;
+      transform:translateY(-50%); align-items:flex-end; max-width:44%; }
+  }
+  #bugBtn {
+    position:fixed; left:12px; bottom:12px; width:40px; height:40px; z-index:5;
+    border-radius:13px; border:1px solid rgba(120,110,150,.18); background:#fff;
+    color:#e2504a; font:800 20px/1 system-ui; cursor:pointer;
+    box-shadow:0 3px 8px rgba(60,50,90,.16);
+  }
+  #bugModal { position:fixed; inset:0; z-index:20; display:none; align-items:center; justify-content:center;
+    background:rgba(40,35,60,.45); padding:20px; }
+  #bugModal.show { display:flex; }
+  #bugModal .card { width:min(100%,420px); background:#fff; border-radius:18px; padding:20px;
+    box-shadow:0 20px 50px rgba(40,35,60,.3); }
+  #bugModal h2 { font-size:17px; color:#33304a; }
+  #bugModal p { margin-top:8px; font-size:12px; line-height:1.7; color:#7a7590; }
+  #bugModal textarea { width:100%; margin-top:12px; padding:10px; border-radius:12px; resize:vertical;
+    background:#f7f6fb; color:#33304a; border:1px solid #e3dcc9; font:inherit; font-size:14px; }
+  #bugModal .row { display:flex; gap:8px; margin-top:12px; }
+  #bugModal .row.end { justify-content:flex-end; }
+  #bugModal button { padding:10px 16px; border:none; border-radius:999px; background:#2bb8d8; color:#fff;
+    font-family:inherit; font-weight:800; font-size:13px; line-height:1; cursor:pointer; }
+  #bugModal button.ghost { background:#f0eef6; color:#7a7590; }
+  #bugModal #bugStuck { background:#ef7d2e; }
+  #bugModal .msg { margin-top:10px; font-size:12px; color:#2fbf7a; min-height:16px; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="start" class="loading">
+  <picture>
+    <source media="(min-aspect-ratio: 1/1)" srcset="assets/cover_wide.png">
+    <img id="cover" alt="QUANTUM TYCOON" src="assets/cover.png">
+  </picture>
+  <script>  (function () {
+    var l = null;
+    try { l = localStorage.getItem('quantum_tycoon_lang'); } catch (e) { }
+    if (!l) l = (navigator.language || '').indexOf('ja') === 0 ? 'ja' : 'en';
+    if (l !== 'en') return;
+    var pic = document.currentScript.previousElementSibling;
+    pic.querySelector('source').srcset = 'assets/cover_wide_en.png';
+    pic.querySelector('img').src = 'assets/cover_en.png';
+  })();</script>
+  <div id="titleInfo"></div>
+  <div id="titleAcc"></div>
+  <div id="titleVers"></div>
+  <div id="tapStart">タップしてスタート TAP TO START</div>
+</div>
+<script src="js/i18n.js?v=b88f1b7496"></script>
+<script src="js/iso.js?v=ff01ac4b0d"></script>
+<script src="js/sfx.js?v=2ae430933a"></script>
+<script src="js/bgm.js?v=b6b5dbbe57"></script>
+<script src="js/bug.js?v=79653588a7"></script>
+<script src="js/world.js?v=23b85bbebf"></script>
+<script src="js/game.js?v=cab32f2197"></script>
+<script src="js/render.js?v=f8ea2a44c4"></script>
+<script src="js/art/biz.js?v=10190f217a"></script>
+<script src="js/art/town.js?v=1c9ce011d1"></script>
+<script src="js/art/office.js?v=cc534a37af"></script>
+<script src="js/art/factory.js?v=b5e57be641"></script>
+<script src="js/art/hq.js?v=159ebd3e26"></script>
+<script src="js/art/people.js?v=005b2858f6"></script>
+<script src="js/art/guide.js?v=daf5d2cc7c"></script>
+<script src="js/input.js?v=38243b27d7"></script>
+<script src="js/share.js?v=e01fac15fe"></script>
+<script src="js/main.js?v=391971b50a"></script>
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#d9efff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>不動産タイクーン ESTATE TYCOON</title>
+<script>window.QT_STATIC = true; window.QT_ISSUES = "https://github.com/minatoyuichiro/quantum-tycoon/issues/new"; window.QT_SHARE_URL = "https://tycoon.blueqat.app/estate/";</script>
+<meta name="description" content="会社員か年金暮らしで始めて、物件を買って貸して、家賃の手取りで暮らしをまかなえたらクリア。金利・融資・税・トラブルも体験できる、不動産の初心者のための経営ゲーム。">
+<link rel="canonical" href="https://tycoon.blueqat.app/estate/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="不動産タイクーン">
+<meta property="og:title" content="不動産タイクーン ESTATE TYCOON — 家賃収入で、安心の暮らし">
+<meta property="og:description" content="会社員か年金暮らしで始めて、物件を買って貸して、家賃の手取りで暮らしをまかなえたらクリア（目安 30分〜1時間）。金利・融資・税・トラブルも。">
+<meta property="og:url" content="https://tycoon.blueqat.app/estate/">
+<meta property="og:image" content="https://tycoon.blueqat.app/estate/assets/cover_wide.png?v=ffa4b2bac7">
+<meta property="og:image:width" content="2400">
+<meta property="og:image:height" content="1350">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:alt" content="不動産タイクーン ESTATE TYCOON">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="不動産タイクーン ESTATE TYCOON — 家賃収入で、安心の暮らし">
+<meta name="twitter:description" content="会社員か年金暮らしで始めて、物件を買って貸して、家賃の手取りで暮らしをまかなえたらクリア（目安 30分〜1時間）。金利・融資・税・トラブルも。">
+<meta name="twitter:image" content="https://tycoon.blueqat.app/estate/assets/cover_wide.png?v=ffa4b2bac7">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html, body {
+    width:100%; height:100%; overflow:hidden; background:#eaf4ff;
+    font-family:"Hiragino Maru Gothic ProN","Hiragino Sans","Yu Gothic UI",system-ui,sans-serif;
+    -webkit-user-select:none; user-select:none; touch-action:none; overscroll-behavior:none;
+    color:#33304a;
+  }
+  #c { display:block; width:100%; height:100%; touch-action:none; }
+  #start {
+    position:fixed; inset:0; z-index:10; cursor:pointer;
+    background:linear-gradient(#8bbbe9 0%,#c2d1de 25%,#e1dad0 40%,#f6e0c6 50%,#ffe2c1 62%,#f2cea5 90%,#ecc69f 100%);
+  }
+  #start.hide { display:none; }
+  #cover { width:100%; height:100%; object-fit:cover; display:block; }
+  #start.loading::after {
+    content:""; position:absolute; left:50%; bottom:38px; width:34px; height:34px;
+    margin-left:-17px; border-radius:50%;
+    border:3px solid rgba(255,255,255,.45); border-top-color:#fff;
+    filter:drop-shadow(0 1px 2px rgba(40,30,90,.45));
+    animation:spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  #start picture { display:block; width:100%; height:100%; }
+  #titleInfo { position:absolute; left:50%; bottom:calc(5% + 64px); transform:translateX(-50%);
+    display:flex; flex-direction:column; align-items:center; gap:8px; width:max-content; max-width:92%; }
+  #titleInfo:empty, #start.loading #titleInfo { display:none; }
+  #titleInfo .save { padding:8px 16px; border-radius:14px; background:rgba(255,255,255,.93);
+    color:#33304a; font-weight:800; font-size:13px; line-height:1.5; text-align:center;
+    box-shadow:0 4px 12px rgba(40,40,90,.16); }
+  #titleInfo .save b { color:#c98f0f; }
+  #titleInfo .dream { padding:6px 14px; border-radius:999px; background:rgba(42,63,143,.88); color:#fff;
+    font-weight:900; font-size:12.5px; line-height:1.4; text-align:center; box-shadow:0 4px 12px rgba(40,40,90,.18); }
+  #titleInfo .new { padding:7px 14px; border-radius:999px; border:none; background:rgba(255,255,255,.75);
+    color:#7a7590; font-family:inherit; font-weight:800; font-size:12px; cursor:pointer; }
+  #titleAcc { position:absolute; left:12px; top:calc(14px + env(safe-area-inset-top)); z-index:31;
+    display:flex; align-items:center; gap:6px; max-width:55%; }
+  #titleAcc:empty, #start.loading #titleAcc { display:none; }
+  #titleVers { position:absolute; right:8px; bottom:calc(6px + env(safe-area-inset-bottom)); z-index:31; display:flex; gap:6px; }
+  #titleVers:empty, #start.loading #titleVers { display:none; }
+  #titleVers a { padding:3px 8px; border-radius:9px; background:rgba(255,255,255,.55); color:#4a4560;
+    font:700 10.5px/1.4 system-ui,sans-serif; text-decoration:none; }
+  #titleVers a.cur { background:rgba(255,255,255,.9); color:#6f57e0; }
+  #titleAcc span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:11px; font-weight:700;
+    color:#33304a; background:rgba(255,255,255,.85); padding:6px 10px; border-radius:999px; }
+  #titleAcc button { flex:none; padding:7px 12px; border:none; border-radius:999px; background:#fff;
+    color:#e2504a; font-family:inherit; font-weight:800; font-size:12px; cursor:pointer;
+    box-shadow:0 3px 8px rgba(40,40,90,.15); }
+  #tapStart { display:none; position:absolute; left:50%; bottom:calc(5% + env(safe-area-inset-bottom));
+    transform:translateX(-50%); max-width:92%; padding:.72em 1.55em; border-radius:999px;
+    background:#6f57e0; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    font-weight:900; font-size:clamp(13px, 3.8vmin, 20px); line-height:1; letter-spacing:.06em;
+    box-shadow:0 5px 0 #4a36a8, 0 10px 22px rgba(40,30,90,.3); pointer-events:none; }
+  #start.loading #tapStart { display:none; }
+  @media (min-aspect-ratio: 1152/2064) {
+    #start { background:linear-gradient(#8bbbe9 12%,#e1dad0 40%,#ffe2c1 62%,#ecc69f 100%); }
+    #cover { object-position:50% 0; object-position:50% max(0px, calc(100vh - 164.07vw + 4px));
+      object-position:50% max(0px, calc(100dvh - 164.07vw + 4px)); }
+    #tapStart { display:block; }
+    #titleInfo { bottom:calc(5% + 64px + env(safe-area-inset-bottom)); }
+  }
+  @media (min-aspect-ratio: 1/1) {
+    #start { background:linear-gradient(#81aad4 0%,#abb6c6 25%,#c3c0bf 40%,#d7c1b0 50%,#dec2a9 60%,#dfbfa4 75%,#deba99 100%); }
+    #cover { object-position:19% 50%; object-position:max(50%, -15.1vh) 50%; object-position:max(50%, -15.1dvh) 50%; }
+    #tapStart { display:none; }
+    #titleInfo { bottom:calc(6% + 70px); left:max(50%, 73.8vh); left:max(50%, 73.8dvh); }
+    #titleAcc { left:auto; right:124px; max-width:calc(55% - 124px); }
+  }
+  @media (min-aspect-ratio: 1/1) and (min-width: 900px) {
+    #titleAcc { right:164px; max-width:calc(55% - 164px); }
+  }
+  @media (min-aspect-ratio: 201/100) {
+    #cover { object-position:50% 0; }
+    #tapStart { display:block; }
+  }
+  @media (min-aspect-ratio: 1/1) and (max-height: 520px) {
+    #titleInfo { left:auto; right:calc(14px + env(safe-area-inset-right)); top:50%; bottom:auto;
+      transform:translateY(-50%); align-items:flex-end; max-width:44%; }
+  }
+  #bugBtn {
+    position:fixed; left:12px; bottom:12px; width:40px; height:40px; z-index:5;
+    border-radius:13px; border:1px solid rgba(120,110,150,.18); background:#fff;
+    color:#e2504a; font:800 20px/1 system-ui; cursor:pointer;
+    box-shadow:0 3px 8px rgba(60,50,90,.16);
+  }
+  #bugModal { position:fixed; inset:0; z-index:20; display:none; align-items:center; justify-content:center;
+    background:rgba(40,35,60,.45); padding:20px; }
+  #bugModal.show { display:flex; }
+  #bugModal .card { width:min(100%,420px); background:#fff; border-radius:18px; padding:20px;
+    box-shadow:0 20px 50px rgba(40,35,60,.3); }
+  #bugModal h2 { font-size:17px; color:#33304a; }
+  #bugModal p { margin-top:8px; font-size:12px; line-height:1.7; color:#7a7590; }
+  #bugModal textarea { width:100%; margin-top:12px; padding:10px; border-radius:12px; resize:vertical;
+    background:#f7f6fb; color:#33304a; border:1px solid #e3dcc9; font:inherit; font-size:14px; }
+  #bugModal .row { display:flex; gap:8px; margin-top:12px; }
+  #bugModal .row.end { justify-content:flex-end; }
+  #bugModal button { padding:10px 16px; border:none; border-radius:999px; background:#2bb8d8; color:#fff;
+    font-family:inherit; font-weight:800; font-size:13px; line-height:1; cursor:pointer; }
+  #bugModal button.ghost { background:#f0eef6; color:#7a7590; }
+  #bugModal #bugStuck { background:#ef7d2e; }
+  #bugModal .msg { margin-top:10px; font-size:12px; color:#2fbf7a; min-height:16px; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="start" class="loading">
+  <picture>
+    <source media="(min-aspect-ratio: 1/1)" srcset="assets/cover_wide.png">
+    <img id="cover" alt="QUANTUM TYCOON" src="assets/cover.png">
+  </picture>
+  <script>  (function () {
+    var l = null;
+    try { l = localStorage.getItem('re_lang'); } catch (e) { }
+    if (!l) l = (navigator.language || '').indexOf('ja') === 0 ? 'ja' : 'en';
+    l = 'ja';
+    if (l !== 'en') return;
+    var pic = document.currentScript.previousElementSibling;
+    pic.querySelector('source').srcset = 'assets/cover_wide_en.png';
+    pic.querySelector('img').src = 'assets/cover_en.png';
+  })();</script>
+  <div id="titleInfo"></div>
+  <div id="titleAcc"></div>
+  <div id="titleVers"></div>
+  <div id="tapStart">タップしてスタート TAP TO START</div>
+</div>
+<script src="js/i18n.js?v=87d77fa1b3"></script>
+<script src="js/iso.js?v=ff01ac4b0d"></script>
+<script src="js/sfx.js?v=ae5a03d3af"></script>
+<script src="js/bgm.js?v=7b5a0bf817"></script>
+<script src="js/bug.js?v=fd122d5d7f"></script>
+<script src="js/data/d_futako.js?v=5727f35068"></script>
+<script src="js/data/d_shibuya.js?v=d99105e10d"></script>
+<script src="js/data/d_otemachi.js?v=556264a9bd"></script>
+<script src="js/data/d_hongo.js?v=a545420b9e"></script>
+<script src="js/data/d_shinjuku.js?v=41dc5c0dbf"></script>
+<script src="js/data/d_fab.js?v=166f37c224"></script>
+<script src="js/data/d_inzai.js?v=b413a8f298"></script>
+<script src="js/data/d_minato.js?v=eda74b283b"></script>
+<script src="js/data/d_ariake.js?v=57693a741f"></script>
+<script src="js/data/estate.js?v=73c1c0a9bc"></script>
+<script src="js/world.js?v=427e34eb60"></script>
+<script src="js/game.js?v=0659d34c64"></script>
+<script src="js/sim/books.js?v=d180bc0395"></script>
+<script src="js/sim/loan.js?v=b5ce293a1d"></script>
+<script src="js/sim/life.js?v=e41f888ebf"></script>
+<script src="js/sim/tax.js?v=d752d92621"></script>
+<script src="js/sim/estate.js?v=394c9aa382"></script>
+<script src="js/sim/condo.js?v=d8f00d701e"></script>
+<script src="js/sim/ops.js?v=cfd0806b53"></script>
+<script src="js/sim/troubles.js?v=85ae85c46e"></script>
+<script src="js/sim/deals.js?v=7a017c211a"></script>
+<script src="js/sim/places.js?v=7295caffdb"></script>
+<script src="js/sim/inherit.js?v=504631e5d5"></script>
+<script src="js/sim/hojin.js?v=a0be9703ef"></script>
+<script src="js/sim/achv.js?v=abda180cf0"></script>
+<script src="js/sim/travel.js?v=cb7dc88676"></script>
+<script src="js/data/objectives.js?v=87c378e806"></script>
+<script src="js/render.js?v=74ea75f6a2"></script>
+<script src="js/ui/ui.js?v=6a72820411"></script>
+<script src="js/ui/sheet.js?v=dabe609c24"></script>
+<script src="js/ui/propsheet.js?v=17a90ee162"></script>
+<script src="js/ui/places.js?v=822cc40cb6"></script>
+<script src="js/ui/clear.js?v=26da1b5cd1"></script>
+<script src="js/ui/mypage.js?v=dc6d400eda"></script>
+<script src="js/ui/trend.js?v=c98c625de1"></script>
+<script src="js/ui/minimap.js?v=433c27c925"></script>
+<script src="js/ui/routemap.js?v=512ab01387"></script>
+<script src="js/ui/fx.js?v=13616e3d3f"></script>
+<script src="js/ui/dealchips.js?v=a6b3a62a83"></script>
+<script src="js/ui/achv.js?v=f6ee4a8d5c"></script>
+<script src="js/ui/condo.js?v=6ac878ede4"></script>
+<script src="js/ui/hojin.js?v=442432813e"></script>
+<script src="js/art/lib_town.js?v=c0520d9413"></script>
+<script src="js/art/lib_home.js?v=d996a7978b"></script>
+<script src="js/art/tokyo.js?v=32e8254426"></script>
+<script src="js/art/rail.js?v=376d5c47da"></script>
+<script src="js/art/futako.js?v=8b570d8c21"></script>
+<script src="js/art/people.js?v=e299ab3848"></script>
+<script src="js/art/estate.js?v=3ae24d78de"></script>
+<script src="js/art/drama.js?v=65c61e8182"></script>
+<script src="js/input.js?v=7079c68bf0"></script>
+<script src="js/share.js?v=715432534e"></script>
+<script src="js/main.js?v=cf6a3d2f84"></script>
+</body>
+</html>
